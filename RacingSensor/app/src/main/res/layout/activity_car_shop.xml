@@ -1,0 +1,150 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imgBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:alpha="0.3"
+         />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="24dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
+
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:background="@drawable/round_back_button"
+                android:src="@drawable/ic_back_arrow"
+                android:layout_gravity="start"
+                android:scaleType="centerInside"
+                android:layout_marginBottom="16dp" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginBottom="16dp">
+
+                <ImageButton
+                    android:id="@+id/btnLeft"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@android:color/transparent"
+                    android:src="@android:drawable/ic_media_previous" />
+
+                <ImageView
+                    android:id="@+id/imgCar"
+                    android:layout_width="280dp"
+                    android:layout_height="150dp"
+                    android:layout_marginHorizontal="24dp"
+                    android:src="@drawable/car_street" />
+
+                <ImageButton
+                    android:id="@+id/btnRight"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@android:color/transparent"
+                    android:src="@android:drawable/ic_media_next" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvCarName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Street"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:textColor="#000"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:id="@+id/tvSpeed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Speed: 237 mph"
+                android:textSize="18sp"
+                android:textColor="#000"
+                android:layout_marginBottom="6dp" />
+
+            <TextView
+                android:id="@+id/tvHandling"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Handling: 1.27 g/s"
+                android:textSize="18sp"
+                android:textColor="#000"
+                android:layout_marginBottom="6dp" />
+
+            <TextView
+                android:id="@+id/tvAcceleration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Acceleration: 4.49 s"
+                android:textSize="18sp"
+                android:textColor="#000"
+                android:layout_marginBottom="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select Color"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#000"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout
+                android:id="@+id/colorGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="24dp">
+
+                <View
+                    android:id="@+id/colorWhite"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:background="@drawable/circle_white" />
+
+                <View
+                    android:id="@+id/colorBlue"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:background="@drawable/circle_blue" />
+
+                <View
+                    android:id="@+id/colorBlack"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:background="@drawable/circle_black" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnSelectCar"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:text="Select"
+                android:backgroundTint="#0288D1"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:padding="12dp" />
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_racing_car">
+
+    <LinearLayout
+        android:id="@+id/headerPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="24dp">
+
+        <ImageButton
+            android:id="@+id/btnShop"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_circle_neon"
+            android:src="@drawable/ic_shop"
+            android:scaleType="centerInside"
+            app:tint="#FFFFFF"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="16dp"
+            android:background="@drawable/panel_neon_border"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_fuel_neon"
+                app:tint="#FF0000"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="PETROL"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="24dp"
+                android:layout_marginHorizontal="8dp"
+                android:background="#55FFFFFF"/>
+
+            <TextView
+                android:id="@+id/tvFuelValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="120"
+                android:textColor="#FF0000"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="L"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btnNotification"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_circle_neon"
+            android:src="@drawable/ic_notification"
+            android:scaleType="centerInside"
+            app:tint="#FFFFFF"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/headerPanel"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="238dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingHorizontal="32dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnInvitations"
+            style="@style/GameButtonStyle.Secondary"
+            android:layout_width="200dp"
+            android:layout_height="45dp"
+            android:layout_marginBottom="12dp"
+            android:text="INVITATIONS"
+            android:textColor="#FFFFFF"
+            app:backgroundTint="#D50000"
+            app:icon="@drawable/ic_invite"
+            app:iconSize="16dp"
+            app:iconTint="#FFFFFF"
+            app:strokeColor="#FF5252"
+            app:strokeWidth="2dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnPlay"
+            style="@style/GameButtonStyle.Primary"
+            android:layout_width="220dp"
+            android:layout_height="65dp"
+            android:layout_marginBottom="12dp"
+            android:text="PLAY"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            app:backgroundTint="#FF0000"
+            app:icon="@drawable/ic_play_arrow"
+            app:iconSize="24dp"
+            app:iconTint="#FFFFFF"
+            app:strokeColor="#FF8A80"
+            app:strokeWidth="2dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnRandomPlay"
+            style="@style/GameButtonStyle.Secondary"
+            android:layout_width="200dp"
+            android:layout_height="45dp"
+            android:text="RANDOM PLAY"
+            android:textColor="#FFFFFF"
+            app:backgroundTint="#D50000"
+            app:icon="@drawable/ic_casino"
+            app:iconSize="16dp"
+            app:iconTint="#FFFFFF"
+            app:strokeColor="#FF5252"
+            app:strokeWidth="2dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btnSettings"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/bg_circle_neon"
+            android:src="@drawable/ic_settings"
+            app:tint="#FFFFFF"/>
+
+        <ImageButton
+            android:id="@+id/btnLeaderboard"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="40dp"
+            android:background="@drawable/bg_circle_neon"
+            android:src="@drawable/ic_leaderboard"
+            app:tint="#FFFFFF"/>
+    </LinearLayout>
+</RelativeLayout>
