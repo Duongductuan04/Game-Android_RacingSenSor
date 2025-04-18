@@ -12,7 +12,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.os.Vibrator;
-
+import java.util.Random;
+import android.widget.Button;
+import androidx.core.content.ContextCompat;
 public class GameActivity extends AppCompatActivity implements GameView.GameListener, SensorEventListener {
 
     private TextView tvGameMode, tvScore, tvTime;
@@ -33,7 +35,7 @@ public class GameActivity extends AppCompatActivity implements GameView.GameList
 
     private SensorManager sensorManager;
     private Sensor accelerometer;
-
+    private int selectedCarIndex = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +47,7 @@ public class GameActivity extends AppCompatActivity implements GameView.GameList
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         btnPause = findViewById(R.id.btnPause);
         btnPause.setOnClickListener(v -> togglePause());
+        int carIndex = getIntent().getIntExtra(CarShopActivity.EXTRA_SELECTED_CAR, 1);
 
         isRandomMode = getIntent().getBooleanExtra("isRandomMode", false);
         gameMode = getIntent().getStringExtra("gameMode");
@@ -56,10 +59,9 @@ public class GameActivity extends AppCompatActivity implements GameView.GameList
         tvScore = findViewById(R.id.tvScore);
         tvTime = findViewById(R.id.tvTime);
         gameView = findViewById(R.id.gameView);
-
+        gameView.setSelectedCar(carIndex); // Đảm bảo xe được chọn được áp dụng
         gameView.setGameMode(gameMode);
         gameView.setGameListener(this);
-
         setupGameMode();
     }
     private void togglePause() {
@@ -87,25 +89,38 @@ public class GameActivity extends AppCompatActivity implements GameView.GameList
     }
 
     private void setupGameMode() {
+        // Nếu là chế độ random, chọn ngẫu nhiên gameMode
+        if (isRandomMode && (gameMode == null || gameMode.equals("RANDOM"))) {
+            String[] modes = {"SINGLE", "SCORE", "TIMED"};
+            gameMode = modes[new Random().nextInt(modes.length)];
+
+            // Thiết lập giá trị mặc định nếu cần
+            if ("SCORE".equals(gameMode)) {
+                selectedScore = getIntent().getIntExtra("selectedScore", 1000);
+            } else if ("TIMED".equals(gameMode)) {
+                selectedTimeInMillis = getIntent().getLongExtra("selectedTime", 60000);
+                timeRemaining = selectedTimeInMillis;
+            }
+        }
+
+        // Hiển thị thông tin chế độ chơi
         switch (gameMode) {
             case "SCORE":
-                tvGameMode.setText("SCORE MODE - Target: " + selectedScore);
+                tvGameMode.setText(isRandomMode ? "RANDOM: SCORE MODE - Target: " + selectedScore
+                        : "SCORE MODE - Target: " + selectedScore);
                 tvTime.setVisibility(View.GONE);
                 startScoreMode();
                 break;
-
             case "TIMED":
-                tvGameMode.setText("TIMED MODE");
+                tvGameMode.setText(isRandomMode ? "RANDOM: TIMED MODE" : "TIMED MODE");
                 tvTime.setVisibility(View.VISIBLE);
                 startTimedMode();
                 break;
-
             case "SINGLE":
-                tvGameMode.setText("SINGLE PLAYER");
+                tvGameMode.setText(isRandomMode ? "RANDOM: SINGLE PLAYER" : "SINGLE PLAYER");
                 tvTime.setVisibility(View.GONE);
                 startSinglePlayerMode();
                 break;
-
             default:
                 tvGameMode.setText("UNKNOWN MODE");
                 tvTime.setVisibility(View.GONE);
@@ -182,32 +197,95 @@ public class GameActivity extends AppCompatActivity implements GameView.GameList
         isGameOver = true;
         runOnUiThread(() -> showGameOverDialog(finalScore));
     }
-
     private void showGameOverDialog(int finalScore) {
-        new AlertDialog.Builder(this)
-                .setTitle("Game Over")
-                .setMessage("Your score: " + finalScore)
-                .setPositiveButton("Play Again", (dialog, which) -> {
-                    finish();
-                    startActivity(getIntent());
-                })
-                .setNegativeButton("Exit", (dialog, which) -> finish())
-                .setCancelable(false)
-                .show();
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_result, null);
+
+        TextView tvResult = dialogView.findViewById(R.id.tvResult);
+        TextView tvScore = dialogView.findViewById(R.id.tvScoreValue); // Đổi ID
+        TextView tvTime = dialogView.findViewById(R.id.tvTimeValue); // Đổi ID
+        Button btnHome = dialogView.findViewById(R.id.btnReturnHome); // Đổi ID
+        Button btnRematch = dialogView.findViewById(R.id.btnPlayAgain); // Đổi ID
+
+        // Thiết lập nội dung
+        tvResult.setText("YOU LOSE!");
+        tvResult.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_dark));
+        tvScore.setText("Score: " + finalScore);
+
+        if (gameMode.equals("TIMED")) {
+            long timePlayed = selectedTimeInMillis - timeRemaining;
+            String timeText = formatTime(timePlayed);
+            tvTime.setText("Time: " + timeText);
+            tvTime.setVisibility(View.VISIBLE);
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+
+        btnHome.setOnClickListener(v -> {
+            dialog.dismiss();
+            finish();
+        });
+
+        btnRematch.setOnClickListener(v -> {
+            dialog.dismiss();
+            startActivity(getIntent());
+
+        });
+
+        dialog.show();
+    }
+    private void showWinDialog() {
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_result, null);
+
+        TextView tvResult = dialogView.findViewById(R.id.tvResult);
+        TextView tvScore = dialogView.findViewById(R.id.tvScoreValue);
+        TextView tvTime = dialogView.findViewById(R.id.tvTimeValue);
+        Button btnHome = dialogView.findViewById(R.id.btnReturnHome);
+        Button btnRematch = dialogView.findViewById(R.id.btnPlayAgain);
+
+        // Thiết lập nội dung
+        tvResult.setText("YOU WIN!");
+        tvResult.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
+        tvScore.setText("Score: " + score);
+
+        // Hiển thị thời gian nếu là chế độ TIMED
+        if (gameMode.equals("TIMED")) {
+            long timePlayed = selectedTimeInMillis - timeRemaining;
+            String timeText = formatTime(timePlayed);
+            tvTime.setText("Time: " + timeText);
+            tvTime.setVisibility(View.VISIBLE);
+        } else {
+            tvTime.setVisibility(View.GONE);
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+
+        btnHome.setOnClickListener(v -> {
+            dialog.dismiss();
+            finish(); // Quay về màn hình chính
+        });
+
+        btnRematch.setOnClickListener(v -> {
+            dialog.dismiss();
+            startActivity(getIntent());
+
+        });
+
+        dialog.show();
     }
 
-    private void showWinDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("You Win!")
-                .setMessage("You reached the target score: " + selectedScore)
-                .setPositiveButton("Play Again", (dialog, which) -> {
-                    finish();
-                    startActivity(getIntent());
-                })
-                .setNegativeButton("Exit", (dialog, which) -> finish())
-                .setCancelable(false)
-                .show();
+    private String formatTime(long millis) {
+        int seconds = (int) (millis / 1000) % 60;
+        int minutes = (int) ((millis / (1000 * 60)) % 60);
+        return String.format("%02d:%02d", minutes, seconds);
     }
+
+
 
     @Override
     protected void onResume() {

@@ -61,11 +61,11 @@ public class CarShopActivity extends AppCompatActivity {
         // Handle 'back' button click
         btnBack.setOnClickListener(v -> finish());
 
-        // Handle 'select car' button click
         btnSelectCar.setOnClickListener(v -> {
-            Intent resultIntent = new Intent(CarShopActivity.this, GameActivity.class);
-            resultIntent.putExtra(EXTRA_SELECTED_CAR, currentIndex);
-            startActivity(resultIntent);
+            Intent intent = new Intent(CarShopActivity.this, GameModeActivity.class);
+            intent.putExtra(EXTRA_SELECTED_CAR, currentIndex);
+            startActivity(intent);
+            finish();
         });
     }
 

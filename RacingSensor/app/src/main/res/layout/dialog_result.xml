@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_background"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center">
+
+    <!-- Kết quả (Win/Lose) -->
+    <TextView
+        android:id="@+id/tvResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Hiển thị điểm số -->
+    <TextView
+        android:id="@+id/tvScoreValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Hiển thị thời gian -->
+    <TextView
+        android:id="@+id/tvTimeValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_marginBottom="24dp"
+        android:visibility="gone"/>
+
+    <!-- Nút điều hướng -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/btnReturnHome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:text="Màn hình chính"
+            android:backgroundTint="#FF5722"
+            android:textColor="#FFFFFF"/>
+
+        <Button
+            android:id="@+id/btnPlayAgain"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="Chơi lại"
+            android:backgroundTint="#4CAF50"
+            android:textColor="#FFFFFF"/>
+    </LinearLayout>
+</LinearLayout>

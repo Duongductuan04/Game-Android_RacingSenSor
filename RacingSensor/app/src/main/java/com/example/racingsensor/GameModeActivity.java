@@ -7,13 +7,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class GameModeActivity extends AppCompatActivity {
 
+    private int selectedCarIndex; // Thêm biến lưu xe được chọn
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_mode);
 
-        // Nhận tham số từ MainActivity
+        // Nhận cả 2 tham số từ CarShopActivity
         boolean isRandom = getIntent().getBooleanExtra("isRandomMode", false);
+        selectedCarIndex = getIntent().getIntExtra(CarShopActivity.EXTRA_SELECTED_CAR, 1);
 
         Button btnScoreMode = findViewById(R.id.btnScoreMode);
         Button btnTimedMode = findViewById(R.id.btnTimedMode);
@@ -22,12 +25,14 @@ public class GameModeActivity extends AppCompatActivity {
         btnScoreMode.setOnClickListener(v -> {
             Intent intent = new Intent(this, ScoreSelectionActivity.class);
             intent.putExtra("isRandomMode", isRandom);
+            intent.putExtra(CarShopActivity.EXTRA_SELECTED_CAR, selectedCarIndex); // Thêm xe đã chọn
             startActivity(intent);
         });
 
         btnTimedMode.setOnClickListener(v -> {
             Intent intent = new Intent(this, TimedSelectionActivity.class);
             intent.putExtra("isRandomMode", isRandom);
+            intent.putExtra(CarShopActivity.EXTRA_SELECTED_CAR, selectedCarIndex); // Thêm xe đã chọn
             startActivity(intent);
         });
 
@@ -38,6 +43,7 @@ public class GameModeActivity extends AppCompatActivity {
         Intent intent = new Intent(this, GameActivity.class);
         intent.putExtra("isRandomMode", isRandom);
         intent.putExtra("gameMode", mode);
+        intent.putExtra(CarShopActivity.EXTRA_SELECTED_CAR, selectedCarIndex); // Thêm xe đã chọn
         startActivity(intent);
     }
 }

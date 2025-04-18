@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class TimedSelectionActivity extends AppCompatActivity {
 
     private long selectedTimeInMillis = 45000; // Mặc định là 45 giây
+    private int selectedCarIndex; // Thêm biến lưu xe được chọn
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,7 +17,7 @@ public class TimedSelectionActivity extends AppCompatActivity {
 
         // Nhận tham số từ GameModeActivity
         boolean isRandom = getIntent().getBooleanExtra("isRandomMode", false);
-
+        selectedCarIndex = getIntent().getIntExtra(CarShopActivity.EXTRA_SELECTED_CAR, 1);
         // Ánh xạ các nút TIMED
         Button btnTimed45s = findViewById(R.id.btnTimed45s);
         Button btnTimed60s = findViewById(R.id.btnTimed60s);
@@ -51,7 +52,8 @@ public class TimedSelectionActivity extends AppCompatActivity {
 
         // Xử lý nút Single Player
         btnSinglePlayer.setOnClickListener(v -> {
-            selectedTimeInMillis = 60000; // Giá trị mặc định cho chế độ SINGLE (60 giây)
+            selectedTimeInMillis = 60000;
+            // Giá trị mặc định cho chế độ SINGLE (60 giây)
             startGame(isRandom, "SINGLE");
         });
     }
@@ -61,6 +63,8 @@ public class TimedSelectionActivity extends AppCompatActivity {
         intent.putExtra("isRandomMode", isRandom);
         intent.putExtra("gameMode", mode);
         intent.putExtra("selectedTime", selectedTimeInMillis);
+        intent.putExtra(CarShopActivity.EXTRA_SELECTED_CAR, selectedCarIndex); // Truyền xe đã chọn
+
         startActivity(intent);
     }
 }

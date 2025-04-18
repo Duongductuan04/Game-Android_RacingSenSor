@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class ScoreSelectionActivity extends AppCompatActivity {
 
     private int selectedScore = 500; // Mặc định là 500
+    private int selectedCarIndex; // Thêm biến lưu xe được chọn
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +17,7 @@ public class ScoreSelectionActivity extends AppCompatActivity {
 
         // Nhận tham số từ GameModeActivity
         boolean isRandom = getIntent().getBooleanExtra("isRandomMode", false);
+        selectedCarIndex = getIntent().getIntExtra(CarShopActivity.EXTRA_SELECTED_CAR, 1);
 
         // Ánh xạ các nút SCORE
         Button btnScore500 = findViewById(R.id.btnScore500);
@@ -66,6 +68,8 @@ public class ScoreSelectionActivity extends AppCompatActivity {
         intent.putExtra("isRandomMode", isRandom);
         intent.putExtra("gameMode", mode);
         intent.putExtra("selectedScore", selectedScore);
+        intent.putExtra(CarShopActivity.EXTRA_SELECTED_CAR, selectedCarIndex); // Truyền xe đã chọn
+
         startActivity(intent);
     }
 }

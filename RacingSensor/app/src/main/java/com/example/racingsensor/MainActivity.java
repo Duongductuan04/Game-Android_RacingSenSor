@@ -1,5 +1,5 @@
 package com.example.racingsensor;
-
+import java.util.Random;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -62,9 +62,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void startGameMode(boolean isRandom) {
         if (fuelAmount > 0) {
-            Intent intent = new Intent(this, GameModeActivity.class);
-            intent.putExtra("isRandomMode", isRandom);
-            startActivity(intent);
+            if (isRandom) {
+                // Chế độ random - chọn ngẫu nhiên chế độ chơi
+                startRandomGameMode();
+            } else {
+                // Chế độ bình thường - vào màn hình chọn chế độ
+                Intent intent = new Intent(this, GameModeActivity.class);
+                intent.putExtra("isRandomMode", false);
+                startActivity(intent);
+            }
 
             // Giảm nhiên liệu khi bắt đầu chơi
             fuelAmount -= 10;
@@ -74,6 +80,33 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void startRandomGameMode() {
+        // Khởi tạo đối tượng Random
+        Random random = new Random();
+
+        // Tạo số ngẫu nhiên từ 0-2
+        int randomMode = random.nextInt(3);
+
+        Intent intent = new Intent(this, GameActivity.class);
+        intent.putExtra("isRandomMode", true);
+
+        // Thiết lập tham số theo chế độ ngẫu nhiên
+        switch (randomMode) {
+            case 0: // SINGLE
+                intent.putExtra("gameMode", "SINGLE");
+                break;
+            case 1: // SCORE
+                intent.putExtra("gameMode", "SCORE");
+                intent.putExtra("selectedScore", 1000); // Giá trị mặc định
+                break;
+            case 2: // TIMED
+                intent.putExtra("gameMode", "TIMED");
+                intent.putExtra("selectedTime", 60000); // 60 giây mặc định
+                break;
+        }
+
+        startActivity(intent);
+    }
     private void updateFuelDisplay() {
         tvFuelValue.setText(String.valueOf(fuelAmount));
     }
