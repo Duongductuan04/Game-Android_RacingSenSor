@@ -19,8 +19,18 @@ public class GameModeActivity extends AppCompatActivity {
         Button btnTimedMode = findViewById(R.id.btnTimedMode);
         Button btnSinglePlayer = findViewById(R.id.btnSinglePlayer);
 
-        btnScoreMode.setOnClickListener(v -> startGame(isRandom, "SCORE"));
-        btnTimedMode.setOnClickListener(v -> startGame(isRandom, "TIMED"));
+        btnScoreMode.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ScoreSelectionActivity.class);
+            intent.putExtra("isRandomMode", isRandom);
+            startActivity(intent);
+        });
+
+        btnTimedMode.setOnClickListener(v -> {
+            Intent intent = new Intent(this, TimedSelectionActivity.class);
+            intent.putExtra("isRandomMode", isRandom);
+            startActivity(intent);
+        });
+
         btnSinglePlayer.setOnClickListener(v -> startGame(isRandom, "SINGLE"));
     }
 

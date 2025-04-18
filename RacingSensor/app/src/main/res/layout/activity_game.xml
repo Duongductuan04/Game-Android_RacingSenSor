@@ -2,50 +2,62 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#121212">
+    android:background="@drawable/game_background"
+    android:padding="16dp">
 
-    <!-- Hiển thị chế độ chơi -->
-    <TextView
-        android:id="@+id/tvGameMode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
+<LinearLayout
+    android:id="@+id/header"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="horizontal"
+android:gravity="center_vertical"
+android:background="@drawable/header_background"
+android:padding="8dp">
 
-    <!-- Hiển thị điểm số -->
-    <TextView
-        android:id="@+id/tvScore"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:text="Score: 0"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"/>
+<ImageButton
+    android:id="@+id/btnPause"
+    android:layout_width="40dp"
+    android:layout_height="40dp"
+    android:layout_marginEnd="16dp"
+    android:background="@drawable/rounded_button"
+    android:src="@drawable/ic_pause" />
 
-    <!-- Hiển thị thời gian (chỉ hiện trong chế độ TIMED) -->
-    <TextView
-        android:id="@+id/tvTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvGameMode"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:textColor="#FF5722"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:visibility="gone"/>
+<TextView
+    android:id="@+id/tvGameMode"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textColor="#FFFFFF"
+    android:textSize="18sp"
+    android:textStyle="bold" />
 
-    <!-- SurfaceView cho game (sẽ thêm sau) -->
-    <SurfaceView
-        android:id="@+id/gameView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/tvGameMode"/>
+<Space
+    android:layout_width="0dp"
+    android:layout_height="1dp"
+    android:layout_weight="1" />
 
-</RelativeLayout>
+<TextView
+    android:id="@+id/tvScore"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textColor="#FFFFFF"
+    android:textSize="18sp"
+    android:textStyle="bold"
+    android:layout_marginEnd="16dp" />
+
+<TextView
+    android:id="@+id/tvTime"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textColor="#FFD700"
+android:textSize="18sp"
+android:textStyle="bold" />
+</LinearLayout>
+
+
+<com.example.racingsensor.GameView
+android:id="@+id/gameView"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:layout_below="@id/header"
+android:layout_marginTop="8dp" />
+    </RelativeLayout>

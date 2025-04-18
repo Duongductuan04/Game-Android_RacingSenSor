@@ -50,7 +50,7 @@
                     android:layout_width="280dp"
                     android:layout_height="150dp"
                     android:layout_marginHorizontal="24dp"
-                    android:src="@drawable/car_street" />
+                    android:src="@drawable/car" />
 
                 <ImageButton
                     android:id="@+id/btnRight"
@@ -96,55 +96,15 @@
                 android:textSize="18sp"
                 android:textColor="#000"
                 android:layout_marginBottom="20dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Select Color"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:textColor="#000"
-                android:layout_marginBottom="12dp" />
-
-            <LinearLayout
-                android:id="@+id/colorGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:layout_marginBottom="24dp">
-
-                <View
-                    android:id="@+id/colorWhite"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_marginHorizontal="16dp"
-                    android:background="@drawable/circle_white" />
-
-                <View
-                    android:id="@+id/colorBlue"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_marginHorizontal="16dp"
-                    android:background="@drawable/circle_blue" />
-
-                <View
-                    android:id="@+id/colorBlack"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_marginHorizontal="16dp"
-                    android:background="@drawable/circle_black" />
-            </LinearLayout>
-
-            <Button
+            <ImageButton
                 android:id="@+id/btnSelectCar"
                 android:layout_width="240dp"
                 android:layout_height="wrap_content"
-                android:text="Select"
-                android:backgroundTint="#0288D1"
-                android:textColor="#FFFFFF"
-                android:textStyle="bold"
-                android:padding="12dp" />
+                android:src="@drawable/ic_select_car"
+                android:background="?attr/selectableItemBackgroundBorderless"
+
+                android:layout_margin="12dp" />
+
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

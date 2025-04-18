@@ -50,16 +50,14 @@ public class MainActivity extends AppCompatActivity {
         btnRandomPlay.setOnClickListener(v -> startGameMode(true));
         btnInvitations.setOnClickListener(v -> showInvitationsDialog());
 
-        // 👉 Chuyển sang CarShopActivity khi bấm icon Shop
+        // Sự kiện cho nút cửa hàng
         iconShop.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, CarShopActivity.class);
             startActivity(intent);
         });
 
-        // (Tùy chọn) Xử lý các icon khác nếu bạn cần
+        // Các sự kiện khác có thể thêm ở đây
         iconNotification.setOnClickListener(v -> showNotifications());
-        iconSettings.setOnClickListener(v -> showAlert("Settings", "Coming soon!"));
-        iconLeaderboard.setOnClickListener(v -> showAlert("Leaderboard", "Coming soon!"));
     }
 
     private void startGameMode(boolean isRandom) {
@@ -89,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showNotifications() {
+        // Hiển thị thông báo
         showAlert("Notifications", "No new notifications");
     }
 

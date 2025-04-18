@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#121212"
     android:gravity="center"
     android:orientation="vertical"
+    android:background="@drawable/bg_racing_car"
     android:padding="16dp">
 
     <TextView
@@ -17,28 +17,29 @@
         android:layout_marginBottom="32dp"/>
 
     <!-- Chế độ chơi theo điểm -->
+    <!-- Nút SCORE -->
     <Button
         android:id="@+id/btnScoreMode"
         android:layout_width="300dp"
         android:layout_height="80dp"
         android:layout_marginBottom="20dp"
-
         android:text="SCORE"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        android:backgroundTint="#FF5722"/>
 
-    <!-- Chế độ chơi tính giờ -->
+    <!-- Nút TIMED -->
     <Button
         android:id="@+id/btnTimedMode"
         android:layout_width="300dp"
         android:layout_height="80dp"
         android:layout_marginBottom="20dp"
-        android:text="TIMED\n00:45 - 01:00"
+        android:text="TIMED"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:gravity="center"/>
+        android:textSize="20sp"
+        android:backgroundTint="#FF5722"/>
 
     <!-- Chế độ chơi đơn -->
     <Button
