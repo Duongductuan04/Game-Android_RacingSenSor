@@ -55,6 +55,11 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, CarShopActivity.class);
             startActivity(intent);
         });
+        // Sự kiện cho nút cửa hàng
+        iconLeaderboard.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, LeaderboardActivity.class);
+            startActivity(intent);
+        });
 
         // Các sự kiện khác có thể thêm ở đây
         iconNotification.setOnClickListener(v -> showNotifications());

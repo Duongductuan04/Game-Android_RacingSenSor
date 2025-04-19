@@ -51,7 +51,13 @@
             android:name=".CarShopActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <!-- Leaderboard Activity -->
+        <activity
+            android:name=".LeaderboardActivity"
 
+            android:exported="false"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>
