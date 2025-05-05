@@ -1,0 +1,12 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Màu nền với độ trong suốt -->
+    <solid android:color="#80000000"/> <!-- Đặt màu nền bạn muốn, ví dụ đen trong suốt -->
+
+    <!-- Bo tròn các góc -->
+    <corners android:radius="16dp"/> <!-- Điều chỉnh góc bo tròn ở đây -->
+
+    <!-- Đặt một viền cho phần tử, nếu cần -->
+    <stroke
+        android:width="2dp"
+        android:color="#FFFFFF"/> <!-- Viền màu trắng, bạn có thể thay đổi -->
+</shape>

@@ -1,0 +1,5 @@
+<!-- login_icon.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
+    <path d="M28 12V8H44V40H28V36H40V12H28Z" fill="#000000"/>
+    <path d="M20 16L16.6 19.4L22.2 25H4V29H22.2L16.6 34.6L20 38L32 26L20 16Z" fill="#000000"/>
+</svg>

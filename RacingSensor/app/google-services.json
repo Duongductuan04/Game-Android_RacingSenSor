@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "97096725047",
+    "project_id": "btlandroid-1afa2",
+    "storage_bucket": "btlandroid-1afa2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:97096725047:android:ea78dbf31ecabe932345b2",
+        "android_client_info": {
+          "package_name": "com.example.racingsensor"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIwuak1pNEbmugomw0TTNbI_fsQT1VDeA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

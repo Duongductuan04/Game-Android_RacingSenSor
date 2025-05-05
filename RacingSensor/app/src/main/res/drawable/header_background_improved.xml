@@ -1,0 +1,5 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#80000000" /> <!-- Màu đen với độ trong suốt 50% -->
+    <corners android:bottomLeftRadius="0dp"
+        android:bottomRightRadius="0dp" />
+</shape>

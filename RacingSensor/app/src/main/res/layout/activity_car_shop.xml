@@ -6,8 +6,8 @@
         android:id="@+id/imgBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:alpha="0.3"
+        android:background="@drawable/bg_leaderboard"
+        android:padding="16dp"
          />
 
     <ScrollView
@@ -67,7 +67,7 @@
                 android:text="Street"
                 android:textSize="26sp"
                 android:textStyle="bold"
-                android:textColor="#000"
+                android:textColor="#FFF"
                 android:layout_marginBottom="16dp" />
 
             <TextView
@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:text="Speed: 237 mph"
                 android:textSize="18sp"
-                android:textColor="#000"
+                android:textColor="#FFF"
                 android:layout_marginBottom="6dp" />
 
             <TextView
@@ -85,7 +85,7 @@
                 android:layout_height="wrap_content"
                 android:text="Handling: 1.27 g/s"
                 android:textSize="18sp"
-                android:textColor="#000"
+                android:textColor="#FFF"
                 android:layout_marginBottom="6dp" />
 
             <TextView
@@ -94,7 +94,7 @@
                 android:layout_height="wrap_content"
                 android:text="Acceleration: 4.49 s"
                 android:textSize="18sp"
-                android:textColor="#000"
+                android:textColor="#FFF"
                 android:layout_marginBottom="20dp" />
             <ImageButton
                 android:id="@+id/btnSelectCar"

@@ -1,7 +1,8 @@
 package com.example.racingsensor;
-import java.util.Random;
+
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -18,7 +19,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-public class GameActivity extends AppCompatActivity implements GameView.GameListener, SensorEventListener {
+import java.util.Random;
+
+public class GameActivity extends AppCompatActivity implements SensorEventListener {
 
     // UI Components
     private TextView tvGameMode, tvScore, tvTime;
@@ -40,11 +43,20 @@ public class GameActivity extends AppCompatActivity implements GameView.GameList
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private Sensor gyroscope;
+    private Sensor lightSensor;
     private float[] accelerometerValues = new float[3];
     private float[] gyroscopeValues = new float[3];
+    private float currentLightLevel = -1;
     private static final float FILTER_ALPHA = 0.15f;
+    private static final float LIGHT_THRESHOLD = 20f;
     private long lastSensorUpdateTime = 0;
-    private static final int SENSOR_DELAY_MICROS = 10000; // ~100Hz
+    private static final int SENSOR_DELAY_MICROS = 10000;
+
+    // Game controls
+    private static final float TILT_THRESHOLD = 1.5f;
+    private static final float TILT_DEADZONE = 0.3f;
+    private int currentLane = 1;
+    private boolean isChangingLane = false;
 
     // Vibration
     private Vibrator vibrator;
@@ -71,6 +83,30 @@ public class GameActivity extends AppCompatActivity implements GameView.GameList
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         btnPause.setOnClickListener(v -> togglePause());
+
+        gameView.setGameListener(new GameView.GameListener() {
+            @Override
+            public void onScoreUpdated(int score) {
+                GameActivity.this.score = score;
+                updateScoreDisplay();
+
+                if (gameMode.equals("SCORE") && score >= selectedScore) {
+                    endGame();
+                    showWinDialog();
+                }
+            }
+
+            @Override
+            public void onGameOver(int finalScore) {
+                endGame();
+                showGameOverDialog(finalScore);
+            }
+
+            @Override
+            public long getRemainingTime() {
+                return timeRemaining;
+            }
+        });
     }
 
     private void setupSensors() {
@@ -78,6 +114,7 @@ public class GameActivity extends AppCompatActivity implements GameView.GameList
         if (sensorManager != null) {
             accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             gyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+            lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         }
     }
 
@@ -90,9 +127,6 @@ public class GameActivity extends AppCompatActivity implements GameView.GameList
         selectedScore = getIntent().getIntExtra("selectedScore", 1000);
         selectedTimeInMillis = getIntent().getLongExtra("selectedTime", 60000);
         timeRemaining = selectedTimeInMillis;
-
-        gameView.setGameMode(gameMode);
-        gameView.setGameListener(this);
     }
 
     private void setupGameMode() {
@@ -114,16 +148,14 @@ public class GameActivity extends AppCompatActivity implements GameView.GameList
                 tvTime.setVisibility(View.VISIBLE);
                 startTimedMode();
                 break;
-            case "SINGLE":
+            default:
                 tvGameMode.setText(isRandomMode ? "RANDOM: SINGLE PLAYER" : "SINGLE PLAYER");
                 tvTime.setVisibility(View.GONE);
                 startSinglePlayerMode();
                 break;
-            default:
-                tvGameMode.setText("UNKNOWN MODE");
-                tvTime.setVisibility(View.GONE);
-                break;
         }
+
+        gameView.setGameMode(gameMode);
     }
 
     private void startScoreMode() {
@@ -146,6 +178,7 @@ public class GameActivity extends AppCompatActivity implements GameView.GameList
                     tvTime.setText("TIME'S UP!");
                     if (!isGameOver) {
                         endGame();
+                        showGameOverDialog(score);
                     }
                 });
             }
@@ -159,6 +192,16 @@ public class GameActivity extends AppCompatActivity implements GameView.GameList
     private void updateScoreDisplay() {
         runOnUiThread(() -> {
             if (!isDestroyed()) {
+                if (gameView.isDoubleScoreActive()) {
+                    tvScore.setTextColor(Color.YELLOW);
+                    tvScore.setScaleX(1.2f);
+                    tvScore.setScaleY(1.2f);
+                } else {
+                    tvScore.setTextColor(gameView.isNightMode() ? Color.WHITE : Color.BLACK);
+                    tvScore.setScaleX(1f);
+                    tvScore.setScaleY(1f);
+                }
+
                 tvScore.setText("Score: " + score +
                         (gameMode.equals("SCORE") ? " / " + selectedScore : ""));
             }
@@ -179,7 +222,9 @@ public class GameActivity extends AppCompatActivity implements GameView.GameList
                         hasVibrated = true;
                     }
                 } else {
-                    tvTime.setTextColor(ContextCompat.getColor(this, android.R.color.holo_orange_dark));
+                    tvTime.setTextColor(gameView.isNightMode() ?
+                            Color.WHITE :
+                            ContextCompat.getColor(this, android.R.color.holo_orange_dark));
                 }
             }
         });
@@ -199,12 +244,14 @@ public class GameActivity extends AppCompatActivity implements GameView.GameList
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
+        sensorManager.unregisterListener(this);
         btnPause.setImageResource(R.drawable.ic_play);
     }
 
     private void resumeGame() {
         isPaused = false;
         gameView.setPaused(false);
+        registerSensors();
         if (gameMode.equals("TIMED")) {
             startTimedMode();
         }
@@ -214,9 +261,11 @@ public class GameActivity extends AppCompatActivity implements GameView.GameList
     @Override
     protected void onResume() {
         super.onResume();
-        registerSensors();
-        if (gameMode.equals("TIMED") && !isGameOver && !isPaused) {
-            startTimedMode();
+        if (!isPaused) {
+            registerSensors();
+            if (gameMode.equals("TIMED") && !isGameOver) {
+                startTimedMode();
+            }
         }
     }
 
@@ -226,6 +275,9 @@ public class GameActivity extends AppCompatActivity implements GameView.GameList
         }
         if (gyroscope != null) {
             sensorManager.registerListener(this, gyroscope, SENSOR_DELAY_MICROS);
+        }
+        if (lightSensor != null) {
+            sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
 
@@ -265,36 +317,66 @@ public class GameActivity extends AppCompatActivity implements GameView.GameList
                 gyroscopeValues[1] = gyroscopeValues[1] * (1 - FILTER_ALPHA) + event.values[1] * FILTER_ALPHA;
                 gyroscopeValues[2] = gyroscopeValues[2] * (1 - FILTER_ALPHA) + event.values[2] * FILTER_ALPHA;
                 break;
+
+            case Sensor.TYPE_LIGHT:
+                currentLightLevel = event.values[0];
+                gameView.setNightMode(currentLightLevel < LIGHT_THRESHOLD);
+                updateUIForNightMode();
+                break;
         }
 
-        float combinedTiltX = (accelerometerValues[0] * 0.6f) + (gyroscopeValues[0] * 0.4f);
+        if (!isChangingLane) {
+            float tiltX = accelerometerValues[0];
 
-        if (now - lastSensorUpdateTime >= 16) { // ~60fps
+            if (tiltX < -TILT_THRESHOLD && Math.abs(tiltX) > TILT_DEADZONE) {
+                if (currentLane > 0) {
+                    currentLane--;
+                    isChangingLane = true;
+                    startLaneChangeAnimation(currentLane);
+                }
+            } else if (tiltX > TILT_THRESHOLD && Math.abs(tiltX) > TILT_DEADZONE) {
+                if (currentLane < 3) {
+                    currentLane++;
+                    isChangingLane = true;
+                    startLaneChangeAnimation(currentLane);
+                }
+            }
+        }
+
+        if (now - lastSensorUpdateTime >= 16) {
             lastSensorUpdateTime = now;
-            gameView.post(() -> gameView.updateCarPosition(combinedTiltX));
         }
+    }
+
+    private void updateUIForNightMode() {
+        runOnUiThread(() -> {
+            int textColor = gameView.isNightMode() ? Color.WHITE : Color.BLACK;
+            int bgColor = gameView.isNightMode() ? Color.argb(200, 0, 0, 0) : Color.argb(200, 255, 255, 255);
+
+            tvScore.setTextColor(textColor);
+            tvTime.setTextColor(gameView.isNightMode() ? Color.YELLOW : Color.BLUE);
+            tvGameMode.setTextColor(textColor);
+
+            // Cập nhật background header dựa trên chế độ
+            findViewById(R.id.header).setBackgroundColor(bgColor);
+        });
+    }
+    private void startLaneChangeAnimation(final int targetLane) {
+        new CountDownTimer(300, 16) {
+            public void onTick(long millisUntilFinished) {
+                gameView.updateCarPosition(targetLane);
+            }
+
+            public void onFinish() {
+                isChangingLane = false;
+                gameView.updateCarPosition(targetLane);
+            }
+        }.start();
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Not used
-    }
-
-    @Override
-    public void onScoreUpdated(int score) {
-        this.score = score;
-        updateScoreDisplay();
-
-        if (gameMode.equals("SCORE") && score >= selectedScore && !isGameOver) {
-            endGame();
-            showWinDialog();
-        }
-    }
-
-    @Override
-    public void onGameOver(int finalScore) {
-        endGame();
-        showGameOverDialog(finalScore);
     }
 
     private void endGame() {
@@ -303,6 +385,7 @@ public class GameActivity extends AppCompatActivity implements GameView.GameList
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
+        sensorManager.unregisterListener(this);
         saveHighScore();
     }
 
@@ -316,11 +399,6 @@ public class GameActivity extends AppCompatActivity implements GameView.GameList
                 return null;
             }
         }.execute();
-    }
-
-    @Override
-    public long getRemainingTime() {
-        return timeRemaining;
     }
 
     private void showGameOverDialog(int finalScore) {

@@ -1,0 +1,7 @@
+<!-- signup_icon.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
+    <circle cx="24" cy="14" r="8" fill="#000000"/>
+    <path d="M24 26C16.268 26 10 32.268 10 40H14C14 34.477 18.477 30 24 30C29.523 30 34 34.477 34 40H38C38 32.268 31.732 26 24 26Z" fill="#000000"/>
+    <rect x="36" y="6" width="4" height="16" fill="#000000"/>
+    <rect x="30" y="12" width="16" height="4" fill="#000000"/>
+</svg>
